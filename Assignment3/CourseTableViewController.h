@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CourseTableViewController.h
 //  Assignment3
 //
 //  Created by david on 11/20/16.
@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
-@interface ViewController : UIViewController
-
+@interface CourseTableViewController : UITableViewController
 
 @end
-

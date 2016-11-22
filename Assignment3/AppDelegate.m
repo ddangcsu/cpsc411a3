@@ -16,6 +16,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLog(@"PATH: %@\n", self.applicationDocumentsDirectory);
     // Override point for customization after application launch.
     return YES;
 }
