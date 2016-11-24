@@ -33,4 +33,26 @@
     
 }
 
++(instancetype) newCourseInContext:(NSManagedObjectContext *)context {
+    return (Course*)[NSEntityDescription insertNewObjectForEntityForName:@"Course" inManagedObjectContext:context];
+}
+
+-(BOOL) remove {
+    NSManagedObjectContext* context = self.managedObjectContext;
+    [context deleteObject:self];
+    return [self commit];
+}
+
+-(BOOL) commit {
+    NSManagedObjectContext* context = self.managedObjectContext;
+    NSError* error = nil;
+    
+    if (![context save:&error]) {
+        NSLog(@"Failed to save Student %@\n", error);
+        abort();
+    }
+    return YES;
+}
+
+
 @end

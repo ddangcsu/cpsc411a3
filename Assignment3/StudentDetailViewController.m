@@ -160,17 +160,9 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        /* Get context */
-        NSError* error = nil;
-        NSManagedObjectContext* context = self.managedObjectContext;
-        
+		// Get handle of the enrolled Course
         Enrollment* selectedCourse = [self.enrollmentList objectAtIndex:indexPath.row];
-        /* Delete it */
-        [context deleteObject:selectedCourse];
-        if (! [context save:&error]) {
-            NSLog(@"Failed to delete student %@\n", error);
-            abort();
-        }
+        [selectedCourse remove];
         
         /* Remove the data from student List */
         [self.enrollmentList removeObjectAtIndex:indexPath.row];
@@ -278,22 +270,16 @@
     NSMutableArray<Course*>* selectedCourses = courseListVC.selectedCourses;
     
     if (selectedCourses.count > 0) {
-        // Add the selected courses to the temporary enrolled Courses array
-        NSManagedObjectContext *context = self.managedObjectContext;
-        NSError* error = nil;
-
+        // Add the selected courses
         for (Course* course in selectedCourses) {
             // We enroll the student to each of the courses
             // the Score for each score will be auto default to 0 so we do not need to set
-            Enrollment* enrollment = [NSEntityDescription insertNewObjectForEntityForName:@"Enrollment" inManagedObjectContext:context];
+            Enrollment* enrollment = [Enrollment newEnrollmentInContext:self.managedObjectContext];
             enrollment.student = self.aStudent;
             enrollment.course = course;
+            [enrollment commit];
             
             [self.enrollmentList addObject:enrollment];
-        }
-
-        if (![context save: &error]) {
-            NSLog(@"Error unable to save course %@\n", error);
         }
 
         [self.enrollmentsView reloadData];
@@ -324,27 +310,18 @@
         NSString *lastName = [self.lastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSString *cwid = [self.cwid.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        /* Get Context */
-        NSManagedObjectContext* context = self.managedObjectContext;
-        NSError* error = nil;
-        
         if (! self.aStudent) {
-            /* Create a new Course */
-            self.aStudent = [NSEntityDescription insertNewObjectForEntityForName:@"Student" inManagedObjectContext:context];
-        } else {
-            /* We are updating aCourse */
+            /* Create a new Student */
+            self.aStudent = [Student newStudentInContext:self.managedObjectContext];
         }
         
         // We are updating an existing one
-        [self.aStudent setValue:firstName forKey:@"firstName"];
-        [self.aStudent setValue:lastName forKey: @"lastName"];
-        [self.aStudent setValue:cwid forKey: @"cwid"];
-        
-        /* Save it */
-        if (! [context save:&error]) {
-            NSLog(@"Failed to save new student: %@\n", error);
-        }
-        
+        self.aStudent.firstName = firstName;
+        self.aStudent.lastName = lastName;
+        self.aStudent.cwid = cwid;
+        // Commit changes
+        [self.aStudent commit];
+
         /* Go back to the previous page */
         [self Cancel:sender];
         

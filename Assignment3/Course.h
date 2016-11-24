@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Course : NSManagedObject
 +(NSMutableArray<Course*>*) fetchRowsWithPredicates: (nullable NSArray<NSPredicate*>*) predicates inContext: (NSManagedObjectContext*) context;
++(instancetype) newCourseInContext: (NSManagedObjectContext*) context;
+-(BOOL) remove;
+-(BOOL) commit;
 
 @end
 

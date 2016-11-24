@@ -101,16 +101,10 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        /* Get context */
-        NSError* error = nil;
-        NSManagedObjectContext* context = self.managedObjectContext;
+        // Get handle to selected Student
         Student* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
-        /*Delete it */
-        [context deleteObject: selectedStudent];
-        if (! [context save:&error]) {
-            NSLog(@"Failed to delete student %@\n", error);
-            abort();
-        }
+        // Delete it
+        [selectedStudent remove];
         
         /* Remove the data from student List */
         [self.studentList removeObjectAtIndex:indexPath.row];
@@ -120,21 +114,6 @@
 
     }
 }
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Navigation
 

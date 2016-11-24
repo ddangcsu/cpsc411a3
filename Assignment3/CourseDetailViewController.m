@@ -178,27 +178,16 @@
         NSNumber*  mWeight = [NSNumber numberWithFloat:[self.mWeight.text floatValue]];
         NSNumber*  fWeight = [NSNumber numberWithFloat:[self.fWeight.text floatValue]];
         
-        /* Get Context */
-        NSManagedObjectContext* context = self.managedObjectContext;
-        NSError* error = nil;
-        
-        if (! self.aCourse) {
-	        /* Create a new Course */
-    	    self.aCourse = [NSEntityDescription insertNewObjectForEntityForName:@"Course" inManagedObjectContext:context];
-        } else {
-            /* We are updating aCourse */
+        if (!self.aCourse) {
+            /* Create a new Course */
+            self.aCourse = [Course newCourseInContext:self.managedObjectContext];
         }
-    
         // We are updating an existing one
         self.aCourse.courseName = name;
         self.aCourse.hWeight = hWeight;
         self.aCourse.mWeight = mWeight;
         self.aCourse.fWeight = fWeight;
-        
-        /* Save it */
-        if (! [context save:&error]) {
-            NSLog(@"Failed to save new course: %@\n", error);
-        }
+       	[self.aCourse commit];
         
         /* Go back to the previous page */
         [self Cancel:sender];

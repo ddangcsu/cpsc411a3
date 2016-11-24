@@ -33,4 +33,25 @@
     
 }
 
++(instancetype) newStudentInContext: (NSManagedObjectContext*) context {
+    return (Student*)[NSEntityDescription insertNewObjectForEntityForName:@"Student" inManagedObjectContext:context];
+}
+
+-(BOOL) remove {
+    NSManagedObjectContext* context = self.managedObjectContext;
+    [context deleteObject:self];
+    return [self commit];
+}
+
+-(BOOL) commit {
+    NSManagedObjectContext* context = self.managedObjectContext;
+    NSError* error = nil;
+   
+    if (![context save:&error]) {
+        NSLog(@"Failed to save Student %@\n", error);
+        abort();
+    }
+    return YES;
+}
+
 @end

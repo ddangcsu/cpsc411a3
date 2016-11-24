@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Enrollment : NSManagedObject
 
 -(float) averageScore;
++(instancetype) newEnrollmentInContext: (NSManagedObjectContext*) context;
+-(BOOL) remove;
+-(BOOL) commit;
 
 @end
 

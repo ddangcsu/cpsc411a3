@@ -119,20 +119,12 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"In commitEditingStyle\n");
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Get Context
-        NSManagedObjectContext* context = self.managedObjectContext;
-        NSError* error = nil;
-        
+		// Get reference to selected Course
         Course* selectedCourse = [self.courseList objectAtIndex:indexPath.row];
         
         if (selectedCourse.students.count == 0) {
             // We only allow the course deletion when there are no student registered
-            [context deleteObject:selectedCourse];
-            
-            if (! [context save:&error]) {
-                NSLog(@"Failed to remove seleted course %@\n", error);
-            }
-            
+            [selectedCourse remove];
             // Delete the object from array
             [self.courseList removeObjectAtIndex:indexPath.row];
             // Delete the row from the data source
