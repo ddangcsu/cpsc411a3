@@ -25,6 +25,7 @@
 		63AA86111DE6CB2300E4F89E /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86091DE6CB2300E4F89E /* Course.m */; };
 		63AA86121DE6CB2300E4F89E /* Student+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA860B1DE6CB2300E4F89E /* Student+CoreDataProperties.m */; };
 		63AA86131DE6CB2300E4F89E /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA860D1DE6CB2300E4F89E /* Student.m */; };
+		63AA86171DE73BF600E4F89E /* EnrolledStudentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86161DE73BF600E4F89E /* EnrolledStudentsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,8 @@
 		63AA860B1DE6CB2300E4F89E /* Student+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Student+CoreDataProperties.m"; sourceTree = "<group>"; };
 		63AA860C1DE6CB2300E4F89E /* Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
 		63AA860D1DE6CB2300E4F89E /* Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
+		63AA86151DE73BF600E4F89E /* EnrolledStudentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnrolledStudentsTableViewController.h; sourceTree = "<group>"; };
+		63AA86161DE73BF600E4F89E /* EnrolledStudentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnrolledStudentsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +141,8 @@
 				63AA85FD1DE390DC00E4F89E /* StudentDetailViewController.m */,
 				63AA85FF1DE51F7B00E4F89E /* ScoreViewController.h */,
 				63AA86001DE51F7B00E4F89E /* ScoreViewController.m */,
+				63AA86151DE73BF600E4F89E /* EnrolledStudentsTableViewController.h */,
+				63AA86161DE73BF600E4F89E /* EnrolledStudentsTableViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 				63AA85FE1DE390DC00E4F89E /* StudentDetailViewController.m in Sources */,
 				6373A3471DE1D2620018A049 /* StudentTableViewController.m in Sources */,
 				63AA86011DE51F7B00E4F89E /* ScoreViewController.m in Sources */,
+				63AA86171DE73BF600E4F89E /* EnrolledStudentsTableViewController.m in Sources */,
 				63AA86121DE6CB2300E4F89E /* Student+CoreDataProperties.m in Sources */,
 				6373A32E1DE1C3D60018A049 /* Assignment3.xcdatamodeld in Sources */,
 				63AA85FB1DE1DD3A00E4F89E /* CourseDetailViewController.m in Sources */,

@@ -7,15 +7,16 @@
 //
 
 #import "CourseDetailViewController.h"
+#import "EnrolledStudentsTableViewController.h"
 
 @interface CourseDetailViewController ()
-@property (strong, nonatomic) NSMutableArray<Enrollment*>* enrollments;
 #pragma mark - UI Properties
 @property (weak, nonatomic) IBOutlet UILabel *labelError;
 @property (weak, nonatomic) IBOutlet UITextField *courseName;
 @property (weak, nonatomic) IBOutlet UITextField *hWeight;
 @property (weak, nonatomic) IBOutlet UITextField *mWeight;
 @property (weak, nonatomic) IBOutlet UITextField *fWeight;
+@property (weak, nonatomic) IBOutlet UIButton *showEnrolledStudentsButton;
 #pragma mark - UI Actions
 - (IBAction)Cancel:(UIBarButtonItem *)sender;
 - (IBAction)Save:(UIBarButtonItem *)sender;
@@ -35,12 +36,17 @@
     // Do any additional setup after loading the view.
     if (self.aCourse) {
         // We have data passing in
-        self.navigationItem.title = @"Course Detail";
+        self.navigationItem.title = self.aCourse.courseName;
         self.courseName.text = self.aCourse.courseName;
         self.hWeight.text = [self.aCourse.hWeight stringValue];
         self.mWeight.text = [self.aCourse.mWeight stringValue];
         self.fWeight.text = [self.aCourse.fWeight stringValue];
-        self.enrollments = [[self.aCourse.students allObjects] mutableCopy];
+        
+        if (self.aCourse.students.count > 0) {
+            self.showEnrolledStudentsButton.hidden = NO;
+        } else {
+            self.showEnrolledStudentsButton.hidden = YES;
+        }
         
     } else {
         // We are doing a new add
@@ -144,17 +150,18 @@
     return YES;
 }
 
-
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"showEnrolledStudents"]) {
+        EnrolledStudentsTableViewController* enrolledStudentsVC = segue.destinationViewController;
+        enrolledStudentsVC.enrolledStudents = [[self.aCourse.students allObjects] mutableCopy];
+    }
 }
-*/
 
+
+#pragma mark - UI Actions
 - (IBAction)Cancel:(UIBarButtonItem *)sender {
     // Get the View Controller that present this Course Detail Page
     UIViewController *presentFromVC = self.presentingViewController;

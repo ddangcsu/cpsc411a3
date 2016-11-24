@@ -38,14 +38,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     if (self.aStudent) {
-        // We are editing existing student
-    	self.navigationItem.title = @"Update Student";
-        
         self.firstName.text = self.aStudent.firstName;
         self.lastName.text = self.aStudent.lastName;
         self.cwid.text = self.aStudent.cwid;
         /* Get all the enrollment courses if any */
         self.enrollmentList = [[self.aStudent.courses allObjects] mutableCopy];
+        
+        // Update Title
+        self.navigationItem.title = [NSString stringWithFormat:@"%@ %@",self.aStudent.firstName, self.aStudent.lastName];
         
     } else {
         self.navigationItem.title = @"New Student";

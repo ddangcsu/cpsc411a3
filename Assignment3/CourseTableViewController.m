@@ -108,7 +108,6 @@
     return cell;
 }
 
-
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
@@ -129,6 +128,18 @@
             [self.courseList removeObjectAtIndex:indexPath.row];
             // Delete the row from the data source
             [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            // Alert message not allow delete course with registered students
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Cannot Delete Course"
+                                                                           message:@"Cannot delete course that has enrolled student(s)"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+            [self.tableView setEditing:NO animated:YES];
         }
     }
 }
