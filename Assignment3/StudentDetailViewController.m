@@ -212,17 +212,11 @@
     
     if (!self.aStudent || ![[self.aStudent valueForKey:@"cwid"] isEqualToString:cwid]){
         /* Check to make sure that we do not have the same CWID */
-        NSManagedObjectContext* context = self.managedObjectContext;
-        NSError* error = nil;
-        /* Create a fetch request with predicate to see if cwid already exist */
-        NSFetchRequest* checkCWID = [[NSFetchRequest alloc] initWithEntityName:@"Student"];
-        [checkCWID setPredicate:[NSPredicate predicateWithFormat:@"cwid == %@", cwid]];
-        NSArray* results = [context executeFetchRequest:checkCWID error:&error];
-        if (!results) {
-            NSLog(@"Fetch to check CWID uniqueness failed. %@\n", error);
-            abort();
-        }
+        NSPredicate* condition = [NSPredicate predicateWithFormat:@"cwid == %@", cwid];
         
+        /* Check result */
+        NSMutableArray* results = [Student fetchRowsWithPredicates:@[condition] inContext: self.managedObjectContext];
+
         if (results.count > 0) {
             self.labelError.text = @"CWID already exists !";
             [self.cwid setSelected:YES];
@@ -301,15 +295,7 @@
         if (![context save: &error]) {
             NSLog(@"Error unable to save course %@\n", error);
         }
-        /*
-        NSFetchRequest* fetchEnrolled = [[NSFetchRequest alloc] initWithEntityName:@"Enrollment"];
-        [fetchEnrolled setPredicate:[NSPredicate predicateWithFormat:@"student = %@", self.aStudent]];
-        self.registeredCourses = [[context executeFetchRequest:fetchEnrolled error:&error] mutableCopy];
-        if (! results) {
-            NSLog(@"Failed to fetch selected courses %@\n", error);
-            abort();
-        }
-        */
+
         [self.enrollmentsView reloadData];
     }
 

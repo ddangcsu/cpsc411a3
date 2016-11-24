@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "Enrollment.h"
 
 @interface ScoreViewController : UIViewController<UITextFieldDelegate>
-@property (strong, nonatomic) NSManagedObject* courseScore;
+@property (strong, nonatomic) Enrollment* courseScore;
 
 @end

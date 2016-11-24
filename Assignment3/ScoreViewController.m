@@ -36,9 +36,9 @@
         self.navigationItem.rightBarButtonItem = save;
         self.navigationItem.title = [NSString stringWithFormat:@"%@'s Score", [self.courseScore valueForKeyPath:@"course.courseName"]];
         // We populate the view with the Model data passed to us
-        self.hScore.text = [NSString stringWithFormat:@"%@", [self.courseScore valueForKey:@"hScore"]];
-        self.mScore.text = [NSString stringWithFormat:@"%@", [self.courseScore valueForKey:@"mScore"]];
-        self.fScore.text = [NSString stringWithFormat:@"%@", [self.courseScore valueForKey:@"fScore"]];
+        self.hScore.text = [NSString stringWithFormat:@"%.2f", [self.courseScore.hScore floatValue]];
+        self.mScore.text = [NSString stringWithFormat:@"%.2f", [self.courseScore.mScore floatValue]];
+        self.fScore.text = [NSString stringWithFormat:@"%.2f", [self.courseScore.fScore floatValue]];
     }
 }
 
