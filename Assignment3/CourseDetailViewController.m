@@ -9,8 +9,8 @@
 #import "CourseDetailViewController.h"
 
 @interface CourseDetailViewController ()
+@property (strong, nonatomic) NSMutableArray* registeredStudents;
 #pragma mark - UI Properties
-@property (weak, nonatomic) IBOutlet UINavigationItem *header;
 @property (weak, nonatomic) IBOutlet UILabel *labelError;
 @property (weak, nonatomic) IBOutlet UITextField *courseName;
 @property (weak, nonatomic) IBOutlet UITextField *hWeight;
@@ -20,7 +20,10 @@
 - (IBAction)Cancel:(UIBarButtonItem *)sender;
 - (IBAction)Save:(UIBarButtonItem *)sender;
 
+#pragma mark - Utilities Methods
 -(BOOL) validateDataInput;
+
+#pragma mark - CoreData
 -(NSManagedObjectContext*) managedObjectContext;
 
 @end
@@ -32,15 +35,16 @@
     // Do any additional setup after loading the view.
     if (self.aCourse) {
         // We have data passing in
-        self.header.title = @"Course Detail";
+        self.navigationItem.title = @"Course Detail";
         self.courseName.text = [self.aCourse valueForKey:@"courseName"];
         self.hWeight.text = [[self.aCourse valueForKey:@"hWeight"] stringValue];
         self.mWeight.text = [[self.aCourse valueForKey:@"mWeight"] stringValue];
         self.fWeight.text = [[self.aCourse valueForKey:@"fWeight"] stringValue];
+        self.registeredStudents = [[[self.aCourse valueForKey:@"students"] allObjects] mutableCopy];
         
     } else {
         // We are doing a new add
-        self.header.title = @"New Course";
+        self.navigationItem.title = @"New Course";
     }
 }
 
@@ -120,7 +124,7 @@
     }
     
     /* Check for uniqueness in database */
-    if (! self.aCourse) {
+    if (! self.aCourse || ! [[self.aCourse valueForKey: @"courseName"] isEqualToString:name]) {
         NSManagedObjectContext* context = self.managedObjectContext;
         NSError* error = nil;
         
@@ -207,7 +211,7 @@
         }
         
         /* Go back to the previous page */
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self Cancel:sender];
         
     } else {
         NSLog(@"Failed validation \n");

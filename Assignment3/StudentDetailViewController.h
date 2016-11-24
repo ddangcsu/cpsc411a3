@@ -10,7 +10,9 @@
 #import <CoreData/CoreData.h>
 #import "Utilities.h"
 
-@interface StudentDetailViewController : UIViewController <UITextFieldDelegate>
+@interface StudentDetailViewController : UIViewController <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong) NSManagedObject* aStudent;
+
+-(IBAction) unwindFromSelectedCourseList: (UIStoryboardSegue*) segue;
 
 @end

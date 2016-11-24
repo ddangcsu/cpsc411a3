@@ -38,7 +38,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="AJs-A2-udA" kind="presentation" identifier="editStudent" id="Ero-n1-pFQ"/>
+                                    <segue destination="AJs-A2-udA" kind="show" identifier="editStudent" id="LZv-QD-Jpd"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -46,7 +46,7 @@
                     <navigationItem key="navigationItem" title="Student List" id="AwU-lY-a1O">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Iuj-Hk-886">
                             <connections>
-                                <segue destination="AJs-A2-udA" kind="presentation" identifier="addStudent" id="2bT-yq-5Ii"/>
+                                <segue destination="aTG-85-0Sj" kind="presentation" identifier="addStudent" id="2bT-yq-5Ii"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -54,7 +54,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j8h-ro-5BX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1184" y="728"/>
+            <point key="canvasLocation" x="1120" y="334"/>
         </scene>
         <!--Student Detail-->
         <scene sceneID="F7m-If-SIb">
@@ -68,23 +68,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="430-fO-Ocd">
-                                <rect key="frame" x="0.0" y="20" width="414" height="44"/>
-                                <items>
-                                    <navigationItem title="Student Detail" id="R1o-wb-xPN">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="6Yf-Ar-zEc">
-                                            <connections>
-                                                <action selector="Cancel:" destination="AJs-A2-udA" id="3VC-aV-wLr"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="fOV-ml-uC3">
-                                            <connections>
-                                                <action selector="Save:" destination="AJs-A2-udA" id="E9n-28-o5P"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IHE-eo-Ad5">
                                 <rect key="frame" x="20" y="72" width="374" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -133,36 +116,86 @@
                                     <outlet property="delegate" destination="AJs-A2-udA" id="cdo-To-KXy"/>
                                 </connections>
                             </textField>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-cX-yj8">
+                                <rect key="frame" x="20" y="227" width="374" height="422"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="registeredCourse" textLabel="jzW-ug-cqj" detailTextLabel="VjB-Lh-YPm" style="IBUITableViewCellStyleSubtitle" id="01V-sc-DUI">
+                                        <rect key="frame" x="0.0" y="28" width="374" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="01V-sc-DUI" id="4X0-dp-Kxv">
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="49"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jzW-ug-cqj">
+                                                    <rect key="frame" x="15" y="8" width="32" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VjB-Lh-YPm">
+                                                    <rect key="frame" x="15" y="28" width="41" height="14"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="tiA-ra-D2l" kind="show" identifier="editScore" id="CXa-eq-cLO"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="AJs-A2-udA" id="TY4-gK-Ot8"/>
+                                    <outlet property="delegate" destination="AJs-A2-udA" id="l7c-JI-zR3"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="pYJ-gX-Vu9">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="6Yf-Ar-zEc">
+                            <connections>
+                                <action selector="Cancel:" destination="AJs-A2-udA" id="3VC-aV-wLr"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="fOV-ml-uC3">
+                            <connections>
+                                <action selector="Save:" destination="AJs-A2-udA" id="E9n-28-o5P"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="cwid" destination="RTe-fw-Pal" id="MX3-0b-dOy"/>
                         <outlet property="firstName" destination="hyr-1x-ot4" id="qXm-ah-GXL"/>
-                        <outlet property="header" destination="R1o-wb-xPN" id="18M-m8-CZO"/>
                         <outlet property="labelError" destination="IHE-eo-Ad5" id="dXA-eG-CJq"/>
                         <outlet property="lastName" destination="Rwf-uP-cIe" id="e2e-f4-Ui8"/>
+                        <outlet property="registeredCoursesView" destination="i6r-cX-yj8" id="3yE-kO-6qC"/>
+                        <segue destination="GSo-BB-XTx" kind="show" identifier="registerCourse" id="0xW-Kf-T0y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cd9-8i-uvd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1790" y="728"/>
+            <point key="canvasLocation" x="2246" y="334"/>
         </scene>
         <!--Course List-->
         <scene sceneID="CI0-Lh-Mx5">
             <objects>
                 <viewController id="GSo-BB-XTx" customClass="CourseTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="65" sectionHeaderHeight="28" sectionFooterHeight="28" id="Jj7-4x-VJV">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="65" sectionHeaderHeight="28" sectionFooterHeight="28" id="Jj7-4x-VJV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="90" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="course" textLabel="rRU-vP-Mcz" detailTextLabel="l1p-f5-TzY" style="IBUITableViewCellStyleSubtitle" id="myW-UP-Oge">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="90" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="course" textLabel="rRU-vP-Mcz" detailTextLabel="l1p-f5-TzY" style="IBUITableViewCellStyleSubtitle" id="myW-UP-Oge">
                                 <rect key="frame" x="0.0" y="92" width="414" height="65"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="myW-UP-Oge" id="L1f-8n-PQp">
-                                    <rect key="frame" x="0.0" y="0.0" width="381" height="64"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="347" height="64"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rRU-vP-Mcz">
@@ -182,7 +215,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="NG0-HY-s8I" kind="presentation" identifier="editCourse" id="bhO-X5-Cj0"/>
+                                    <segue destination="NG0-HY-s8I" kind="show" identifier="editCourse" trigger="accessoryAction" id="KgL-hz-ing"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -190,15 +223,102 @@
                     <navigationItem key="navigationItem" title="Course List" id="yxy-57-c6C">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="SSY-9H-7wK">
                             <connections>
-                                <segue destination="NG0-HY-s8I" kind="presentation" identifier="addCourse" id="nzw-hh-rbS"/>
+                                <segue destination="v7l-k0-nPD" kind="presentation" identifier="addCourse" id="nzw-hh-rbS"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <segue destination="YcY-l2-CPg" kind="unwind" identifier="enrollSelectedCourses" unwindAction="unwindFromSelectedCourseList:" id="GF8-Tw-TdS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OSN-v7-uym" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="YcY-l2-CPg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1184" y="-127"/>
+            <point key="canvasLocation" x="2832" y="-127"/>
+        </scene>
+        <!--Course Score-->
+        <scene sceneID="Nby-aA-oxE">
+            <objects>
+                <viewController title="Course Score" id="tiA-ra-D2l" customClass="ScoreViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dAi-aF-ZSn"/>
+                        <viewControllerLayoutGuide type="bottom" id="Z7S-lv-kmO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bee-dV-hkE">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Homework" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rOh-vc-yOX">
+                                <rect key="frame" x="20" y="150" width="117" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZLv-hp-Bue">
+                                <rect key="frame" x="136" y="150" width="258" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="NG0-HY-s8I" id="drq-rA-jNF"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PxG-XT-VoJ">
+                                <rect key="frame" x="136" y="188" width="258" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="NG0-HY-s8I" id="O2s-fy-LgD"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oIY-lc-8nn">
+                                <rect key="frame" x="136" y="226" width="258" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="NG0-HY-s8I" id="XZS-sB-rP3"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Midterm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xzc-rg-caB">
+                                <rect key="frame" x="20" y="188" width="117" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Final" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Oh-ZN-IKM">
+                                <rect key="frame" x="20" y="226" width="117" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course Scores" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sI9-Zv-n1n">
+                                <rect key="frame" x="20" y="113" width="374" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZRe-8z-up9">
+                                <rect key="frame" x="20" y="72" width="374" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="fScore" destination="oIY-lc-8nn" id="Cek-X2-e0h"/>
+                        <outlet property="hScore" destination="ZLv-hp-Bue" id="sFs-ol-uwD"/>
+                        <outlet property="labelError" destination="ZRe-8z-up9" id="ypd-Ag-gKv"/>
+                        <outlet property="mScore" destination="PxG-XT-VoJ" id="Jvs-LM-DKJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="33Z-1i-zkL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2832" y="773"/>
         </scene>
         <!--Course Detail-->
         <scene sceneID="J6O-Lp-sLS">
@@ -212,23 +332,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vjz-Dp-A0A">
-                                <rect key="frame" x="0.0" y="20" width="414" height="44"/>
-                                <items>
-                                    <navigationItem title="Course Detail" id="rEz-Qa-Zxn">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Yfz-Hw-CNq">
-                                            <connections>
-                                                <action selector="Cancel:" destination="NG0-HY-s8I" id="ise-Co-g7j"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="wkw-yS-wo5">
-                                            <connections>
-                                                <action selector="Save:" destination="NG0-HY-s8I" id="XcL-U2-NCN"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2y-CV-VNW">
                                 <rect key="frame" x="20" y="113" width="117" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -240,18 +343,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ioD-7p-taa">
-                                <rect key="frame" x="20" y="72" width="374" height="33"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course Weights" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NJ3-2W-bfu">
-                                <rect key="frame" x="20" y="161" width="374" height="29"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Homework" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WOn-gB-d4h">
                                 <rect key="frame" x="20" y="198" width="117" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -294,22 +385,45 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course Weights" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NJ3-2W-bfu">
+                                <rect key="frame" x="20" y="161" width="374" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ioD-7p-taa">
+                                <rect key="frame" x="20" y="72" width="374" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Course Detail" id="ryE-aS-GhG">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="J7D-qX-bIO">
+                            <connections>
+                                <action selector="Cancel:" destination="NG0-HY-s8I" id="epi-aI-Ytu"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="ftE-FX-cP2">
+                            <connections>
+                                <action selector="Save:" destination="NG0-HY-s8I" id="C41-wb-amj"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="courseName" destination="ScV-1B-drc" id="boi-Si-qyv"/>
                         <outlet property="fWeight" destination="pII-1d-so1" id="lCj-s3-h22"/>
                         <outlet property="hWeight" destination="V5c-Qg-ph6" id="sSG-BM-3VW"/>
-                        <outlet property="header" destination="rEz-Qa-Zxn" id="qWg-vO-0xi"/>
                         <outlet property="labelError" destination="ioD-7p-taa" id="4uv-L5-w7h"/>
                         <outlet property="mWeight" destination="027-5G-8o6" id="vHr-c9-wmf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bux-qQ-I7n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1790" y="-127"/>
+            <point key="canvasLocation" x="3458" y="799"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="16P-eh-6qp">
@@ -368,9 +482,46 @@
             </objects>
             <point key="canvasLocation" x="558" y="728"/>
         </scene>
+        <!--Course Detail Navigation-->
+        <scene sceneID="5Up-lR-Klj">
+            <objects>
+                <navigationController title="Course Detail Navigation" automaticallyAdjustsScrollViewInsets="NO" id="v7l-k0-nPD" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kt7-rF-f7D">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="NG0-HY-s8I" kind="relationship" relationship="rootViewController" id="QMD-gv-ceH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5w-YT-oaI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3482" y="-127"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Qbv-IR-Lcb">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aTG-85-0Sj" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Wrt-bx-DEZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="AJs-A2-udA" kind="relationship" relationship="rootViewController" id="8Rv-rq-QYT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zbr-Fx-HCp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1681" y="762"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bhO-X5-Cj0"/>
-        <segue reference="2bT-yq-5Ii"/>
+        <segue reference="KgL-hz-ing"/>
+        <segue reference="0xW-Kf-T0y"/>
+        <segue reference="8Rv-rq-QYT"/>
     </inferredMetricsTieBreakers>
 </document>

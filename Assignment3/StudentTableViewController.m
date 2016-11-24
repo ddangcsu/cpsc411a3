@@ -7,6 +7,7 @@
 //
 
 #import "StudentTableViewController.h"
+#import "studentDetailViewController.h"
 
 @interface StudentTableViewController ()
 -(NSManagedObjectContext*) managedObjectContext;
@@ -78,12 +79,17 @@
     // Configure the cell...
     /* Retrieve the object from array */
     NSManagedObject* aStudent = [self.studentList objectAtIndex:indexPath.row];
-    NSString* fullName = [NSString stringWithFormat:@"%@ %@", [aStudent valueForKey:@"firstName"], [aStudent valueForKey:@"lastName"]];
+    NSString* firstName = [aStudent valueForKey:@"firstName"];
+    NSString* lastName = [aStudent valueForKey:@"lastName"];
     NSString* cwid = [aStudent valueForKey:@"cwid"];
-	
+    NSSet* registeredCourses = [aStudent valueForKey: @"courses"];
+    
+    /* Format string for cell */
+    NSString * title = [NSString stringWithFormat:@"%@ %@ - %lu courses", firstName, lastName, registeredCourses.count];
+    NSString * detail = [NSString stringWithFormat:@"CWID: %@", cwid];
     /* Populate the cell */
-    cell.textLabel.text = fullName;
-    cell.detailTextLabel.text = cwid;
+    cell.textLabel.text = title;
+    cell.detailTextLabel.text = detail;
     
     return cell;
 }
@@ -91,18 +97,24 @@
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    NSManagedObject* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
+    if ([[selectedStudent valueForKey:@"courses"]count] > 0){
+        return NO;
+    } else {
+	    return YES;
+    }
 }
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         /* Get context */
         NSError* error = nil;
         NSManagedObjectContext* context = self.managedObjectContext;
-        
+        NSManagedObject* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
         /*Delete it */
-        [context deleteObject:[self.studentList objectAtIndex:indexPath.row]];
+        [context deleteObject: selectedStudent];
         if (! [context save:&error]) {
             NSLog(@"Failed to delete student %@\n", error);
             abort();
@@ -112,10 +124,9 @@
         [self.studentList removeObjectAtIndex:indexPath.row];
         
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+
+    }
 }
 
 
@@ -133,14 +144,18 @@
 }
 */
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"editStudent"]) {
+        StudentDetailViewController* detailVC = [segue destinationViewController];
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        detailVC.aStudent = [self.studentList objectAtIndex: indexPath.row];
+    }
 }
-*/
+
 
 @end

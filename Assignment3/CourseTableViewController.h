@@ -10,5 +10,7 @@
 #import <CoreData/CoreData.h>
 
 @interface CourseTableViewController : UITableViewController
+@property (strong, nonatomic) NSString* segueIdentifier;
+@property (strong, nonatomic) NSMutableArray* enrolledCourses;
 
 @end

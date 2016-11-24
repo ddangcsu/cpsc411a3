@@ -7,14 +7,18 @@
 //
 
 #import "StudentDetailViewController.h"
+#import "CourseTableViewController.h"
+#import "ScoreViewController.h"
 
 @interface StudentDetailViewController ()
+@property (strong, nonatomic) NSMutableArray* registeredCourses;
+
 #pragma mark - UI Properties
-@property (weak, nonatomic) IBOutlet UINavigationItem *header;
 @property (weak, nonatomic) IBOutlet UILabel *labelError;
 @property (weak, nonatomic) IBOutlet UITextField *firstName;
 @property (weak, nonatomic) IBOutlet UITextField *lastName;
 @property (weak, nonatomic) IBOutlet UITextField *cwid;
+@property (weak, nonatomic) IBOutlet UITableView *registeredCoursesView;
 
 #pragma mark - Core Data managedObjectContext
 - (NSManagedObjectContext*) managedObjectContext;
@@ -35,10 +39,24 @@
     // Do any additional setup after loading the view.
     if (self.aStudent) {
         // We are editing existing student
-    	self.header.title = @"Update Student";
+    	self.navigationItem.title = @"Update Student";
+        
+        self.firstName.text = [self.aStudent valueForKey:@"firstName"];
+        self.lastName.text = [self.aStudent valueForKey:@"lastName"];
+        self.cwid.text = [self.aStudent valueForKey:@"cwid"];
+        /* Get all the registered courses if any */
+        self.registeredCourses = [[[self.aStudent valueForKeyPath:@"courses"] allObjects]mutableCopy];
+        
+        
     } else {
-        self.header.title = @"New Student";
+        self.navigationItem.title = @"New Student";
     }
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self.registeredCoursesView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +86,96 @@
         [Utilities addDoneButtonToKeyPad:textField inView:self.view];
     }
     return YES;
+}
+
+#pragma mark - TableView Delegation and Data Source
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.registeredCourses.count;
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.aStudent) {
+        // Create a toolbar and tell it to autosize itself
+        UIToolbar* toolBar = [[UIToolbar alloc]init];
+        [toolBar sizeToFit];
+        
+        // Create an Add Button of type UIBarButtonItem and tell it to invoke the method
+        // performEnrollCourse defined on this View Controller
+        UIBarButtonItem* addButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                      target:self action:@selector(performEnrollCourse:)];
+        // Create a UIBarButtonItem as a spacer
+        UIBarButtonItem* flexSpace = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                      target:nil action:nil];
+        // Create a UIView Label so that we can create the title text on it
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0,0,150,20)];
+        title.text = @"Enrolled Courses";
+        
+        // We Create another UIBarButtonItem using the UILabel we just created
+        UIBarButtonItem* titleSpace = [[UIBarButtonItem alloc] initWithCustomView:title];
+        
+        // We put all the items on the toolBar in the order that we wanted
+        // Title <space> Add Button
+        toolBar.items = @[titleSpace, flexSpace, addButton];
+        
+        // We return the toolBar (which is a UIView and let the tableView draw it
+        // In the header section
+        return toolBar;
+    } else {
+        return nil;
+    }
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cellId = @"registeredCourse";
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    
+    NSManagedObject* enrolledCourse = [self.registeredCourses objectAtIndex:indexPath.row];
+    NSNumber* hScore = [enrolledCourse valueForKey:@"hScore"];
+    NSNumber* mScore = [enrolledCourse valueForKey:@"mScore"];
+    NSNumber* fScore = [enrolledCourse valueForKey:@"fScore"];
+    
+    /* Format string for cell */
+    NSString* title = [enrolledCourse valueForKeyPath:@"course.courseName"];
+    NSString* detail = [NSString stringWithFormat:@"hScore: %@ mScore: %@ fScore: %@", hScore, mScore, fScore];
+    
+    /* Populate the cell */
+    cell.textLabel.text = title;
+    cell.detailTextLabel.text = detail;
+	
+    return cell;
+}
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        /* Get context */
+        NSError* error = nil;
+        NSManagedObjectContext* context = self.managedObjectContext;
+        
+        /* Delete it */
+        [context deleteObject:[self.registeredCourses objectAtIndex:indexPath.row]];
+        if (! [context save:&error]) {
+            NSLog(@"Failed to delete student %@\n", error);
+            abort();
+        }
+        
+        /* Remove the data from student List */
+        [self.registeredCourses removeObjectAtIndex:indexPath.row];
+        
+        // Delete the row from the data source
+        [self.registeredCoursesView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 
@@ -100,28 +208,114 @@
         return NO;
     }
     
-    /*
-    if (self.enrolledCourses.count < 1) {
-        self.labelError.text = @"Remember to enroll class";
-    } else if (self.enrolledCourses.count > 6) {
-        self.labelError.text = @"Cannot enrolled in more than 6 courses";
-        return NO;
+    if (!self.aStudent || ![[self.aStudent valueForKey:@"cwid"] isEqualToString:cwid]){
+        /* Check to make sure that we do not have the same CWID */
+        NSManagedObjectContext* context = self.managedObjectContext;
+        NSError* error = nil;
+        /* Create a fetch request with predicate to see if cwid already exist */
+        NSFetchRequest* checkCWID = [[NSFetchRequest alloc] initWithEntityName:@"Student"];
+        [checkCWID setPredicate:[NSPredicate predicateWithFormat:@"cwid == %@", cwid]];
+        NSArray* results = [context executeFetchRequest:checkCWID error:&error];
+        if (!results) {
+            NSLog(@"Fetch to check CWID uniqueness failed. %@\n", error);
+            abort();
+        }
+        
+        if (results.count > 0) {
+            self.labelError.text = @"CWID already exists !";
+            [self.cwid setSelected:YES];
+            [self.cwid becomeFirstResponder];
+            return NO;
+        }
     }
-    */
-    // If we get here, it means it's good
+     // If we get here, it means it's good
     return YES;
 }
 
 
-/*
 #pragma mark - Navigation
+
+-(void) performEnrollCourse: (UIBarButtonItem*) sender {
+    // NSLog(@"Button click %@", sender);
+    // Tell the View controller to perform the Manual Segue with teh Identifier of enrollCourses
+    [self performSegueWithIdentifier:@"registerCourse" sender:sender];
+    
+}
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString: @"registerCourse"]) {
+        NSLog(@"We are trying to enroll courses");
+        // Get the Course Listing View Controller
+        CourseTableViewController* courseListVC = [segue destinationViewController];
+        
+        // We pass the identifier so that CourseList view Controller can determine
+        // whether to toggle edit mode with select only
+        courseListVC.segueIdentifier = segue.identifier;
+        
+        NSMutableArray* excludeList = [[NSMutableArray alloc] init];
+        for (NSManagedObject* course in self.registeredCourses) {
+            [excludeList addObject:[course valueForKeyPath:@"course.courseName"]];
+        }
+        
+        // We also pass the current enrolled Courses so that the list will be filtered
+        // and only display courses that we have not register yet.
+        courseListVC.enrolledCourses = excludeList;
+        
+    } else if ([segue.identifier isEqualToString:@"editScore"]) {
+        // Get the Destination View Controller
+        ScoreViewController* scoreVC = segue.destinationViewController;
+        scoreVC.courseScore = [self.registeredCourses objectAtIndex:[self.registeredCoursesView indexPathForSelectedRow].row];
+    }
+
 }
-*/
+
+
+-(IBAction) unwindFromSelectedCourseList: (UIStoryboardSegue*) segue {
+    // NSLog(@"Unwinded from Course List");
+    
+    // Get enrolled Courses from sourceVC
+    CourseTableViewController* enrolledVC = segue.sourceViewController;
+    NSMutableArray* enrolledCourses = enrolledVC.enrolledCourses;
+    
+    if (enrolledCourses.count > 0) {
+        // Add the selected courses to the temporary enrolled Courses array
+        NSManagedObjectContext *context = self.managedObjectContext;
+        NSError* error = nil;
+        NSFetchRequest* fetchSelectedCourses = [[NSFetchRequest alloc] initWithEntityName:@"Course"];
+        [fetchSelectedCourses setPredicate:[NSPredicate predicateWithFormat:@"courseName IN %@", enrolledCourses]];
+        NSArray* results = [context executeFetchRequest:fetchSelectedCourses error:&error];
+        if (! results) {
+            NSLog(@"Failed to fetch selected courses %@\n", error);
+            abort();
+        }
+        for (NSManagedObject* course in results) {
+            NSManagedObject* enrollment = [NSEntityDescription insertNewObjectForEntityForName:@"Enrollment" inManagedObjectContext:context];
+            [enrollment setValue:@0 forKey:@"hScore"];
+            [enrollment setValue:@0 forKey:@"mScore"];
+            [enrollment setValue:@0 forKey:@"fScore"];
+            [enrollment setValue:course forKey:@"course"];
+            [enrollment setValue:self.aStudent forKey:@"student"];
+            
+            if (![context save: &error]) {
+                NSLog(@"Error unable to save course %@\n", error);
+            }
+        }
+        
+        NSFetchRequest* fetchEnrolled = [[NSFetchRequest alloc] initWithEntityName:@"Enrollment"];
+        [fetchEnrolled setPredicate:[NSPredicate predicateWithFormat:@"student = %@", self.aStudent]];
+        self.registeredCourses = [[context executeFetchRequest:fetchEnrolled error:&error] mutableCopy];
+        if (! results) {
+            NSLog(@"Failed to fetch selected courses %@\n", error);
+            abort();
+        }
+
+        [self.registeredCoursesView reloadData];
+    }
+
+}
 
 # pragma mark - UI Actions
 - (IBAction)Cancel:(UIBarButtonItem *)sender {
@@ -164,15 +358,17 @@
         
         /* Save it */
         if (! [context save:&error]) {
-            NSLog(@"Failed to save new course: %@\n", error);
+            NSLog(@"Failed to save new student: %@\n", error);
         }
         
         /* Go back to the previous page */
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self Cancel:sender];
         
     } else {
         NSLog(@"Failed data validation \n");
     }
     
 }
+
+
 @end
