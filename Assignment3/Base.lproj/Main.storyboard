@@ -116,7 +116,7 @@
                                     <outlet property="delegate" destination="AJs-A2-udA" id="cdo-To-KXy"/>
                                 </connections>
                             </textField>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-cX-yj8">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-cX-yj8" userLabel="Enrollment View">
                                 <rect key="frame" x="20" y="227" width="374" height="422"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -171,10 +171,10 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="cwid" destination="RTe-fw-Pal" id="MX3-0b-dOy"/>
+                        <outlet property="enrollmentsView" destination="i6r-cX-yj8" id="yIX-fD-gdW"/>
                         <outlet property="firstName" destination="hyr-1x-ot4" id="qXm-ah-GXL"/>
                         <outlet property="labelError" destination="IHE-eo-Ad5" id="dXA-eG-CJq"/>
                         <outlet property="lastName" destination="Rwf-uP-cIe" id="e2e-f4-Ui8"/>
-                        <outlet property="registeredCoursesView" destination="i6r-cX-yj8" id="3yE-kO-6qC"/>
                         <segue destination="GSo-BB-XTx" kind="show" identifier="registerCourse" id="0xW-Kf-T0y"/>
                     </connections>
                 </viewController>

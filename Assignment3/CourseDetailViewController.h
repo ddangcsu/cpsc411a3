@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "Utilities.h"
+#import "Course.h"
 
 @interface CourseDetailViewController : UIViewController <UITextFieldDelegate>
-@property(strong) NSManagedObject* aCourse;
+@property(strong, nonatomic) Course* aCourse;
 @end

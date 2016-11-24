@@ -9,7 +9,7 @@
 #import "CourseDetailViewController.h"
 
 @interface CourseDetailViewController ()
-@property (strong, nonatomic) NSMutableArray* registeredStudents;
+@property (strong, nonatomic) NSMutableArray<Enrollment*>* enrollments;
 #pragma mark - UI Properties
 @property (weak, nonatomic) IBOutlet UILabel *labelError;
 @property (weak, nonatomic) IBOutlet UITextField *courseName;
@@ -36,11 +36,11 @@
     if (self.aCourse) {
         // We have data passing in
         self.navigationItem.title = @"Course Detail";
-        self.courseName.text = [self.aCourse valueForKey:@"courseName"];
-        self.hWeight.text = [[self.aCourse valueForKey:@"hWeight"] stringValue];
-        self.mWeight.text = [[self.aCourse valueForKey:@"mWeight"] stringValue];
-        self.fWeight.text = [[self.aCourse valueForKey:@"fWeight"] stringValue];
-        self.registeredStudents = [[[self.aCourse valueForKey:@"students"] allObjects] mutableCopy];
+        self.courseName.text = self.aCourse.courseName;
+        self.hWeight.text = [self.aCourse.hWeight stringValue];
+        self.mWeight.text = [self.aCourse.mWeight stringValue];
+        self.fWeight.text = [self.aCourse.fWeight stringValue];
+        self.enrollments = [[self.aCourse.students allObjects] mutableCopy];
         
     } else {
         // We are doing a new add
@@ -125,21 +125,11 @@
     
     /* Check for uniqueness in database */
     if (! self.aCourse || ! [[self.aCourse valueForKey: @"courseName"] isEqualToString:name]) {
-        NSManagedObjectContext* context = self.managedObjectContext;
-        NSError* error = nil;
-        
-        /* Create fetch object with condition */
-        NSFetchRequest* checkCourse = [[NSFetchRequest alloc] initWithEntityName:@"Course"];
+        // Build a condition
         NSPredicate* condition = [NSPredicate predicateWithFormat:@"courseName == %@", name];
-        [checkCourse setPredicate:condition];
         
-        /* Execute it */
-        NSArray* results = [context executeFetchRequest:checkCourse error:&error];
-        
-        if (!results) {
-            NSLog(@"Failed to check unique constraint.  %@\n", error);
-            abort();
-        }
+        // Check Course data
+        NSMutableArray* results = [Course fetchRowsWithPredicates:@[condition] inContext:self.managedObjectContext];
         
         if (results.count > 0) {
             self.labelError.text = @"Course name already exist !";
@@ -198,12 +188,12 @@
         } else {
             /* We are updating aCourse */
         }
-        
+    
         // We are updating an existing one
-        [self.aCourse setValue:name forKey:@"courseName"];
-        [self.aCourse setValue:hWeight forKey: @"hWeight"];
-        [self.aCourse setValue:mWeight forKey: @"mWeight"];
-        [self.aCourse setValue:fWeight forKey: @"fWeight"];
+        self.aCourse.courseName = name;
+        self.aCourse.hWeight = hWeight;
+        self.aCourse.mWeight = mWeight;
+        self.aCourse.fWeight = fWeight;
         
         /* Save it */
         if (! [context save:&error]) {

@@ -19,6 +19,12 @@
 		63AA85FB1DE1DD3A00E4F89E /* CourseDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA85FA1DE1DD3A00E4F89E /* CourseDetailViewController.m */; };
 		63AA85FE1DE390DC00E4F89E /* StudentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA85FD1DE390DC00E4F89E /* StudentDetailViewController.m */; };
 		63AA86011DE51F7B00E4F89E /* ScoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86001DE51F7B00E4F89E /* ScoreViewController.m */; };
+		63AA860E1DE6CB2300E4F89E /* Enrollment+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86031DE6CB2300E4F89E /* Enrollment+CoreDataProperties.m */; };
+		63AA860F1DE6CB2300E4F89E /* Enrollment.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86051DE6CB2300E4F89E /* Enrollment.m */; };
+		63AA86101DE6CB2300E4F89E /* Course+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86071DE6CB2300E4F89E /* Course+CoreDataProperties.m */; };
+		63AA86111DE6CB2300E4F89E /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA86091DE6CB2300E4F89E /* Course.m */; };
+		63AA86121DE6CB2300E4F89E /* Student+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA860B1DE6CB2300E4F89E /* Student+CoreDataProperties.m */; };
+		63AA86131DE6CB2300E4F89E /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AA860D1DE6CB2300E4F89E /* Student.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +49,18 @@
 		63AA85FD1DE390DC00E4F89E /* StudentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StudentDetailViewController.m; sourceTree = "<group>"; };
 		63AA85FF1DE51F7B00E4F89E /* ScoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreViewController.h; sourceTree = "<group>"; };
 		63AA86001DE51F7B00E4F89E /* ScoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreViewController.m; sourceTree = "<group>"; };
+		63AA86021DE6CB2300E4F89E /* Enrollment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Enrollment+CoreDataProperties.h"; sourceTree = "<group>"; };
+		63AA86031DE6CB2300E4F89E /* Enrollment+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Enrollment+CoreDataProperties.m"; sourceTree = "<group>"; };
+		63AA86041DE6CB2300E4F89E /* Enrollment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enrollment.h; sourceTree = "<group>"; };
+		63AA86051DE6CB2300E4F89E /* Enrollment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Enrollment.m; sourceTree = "<group>"; };
+		63AA86061DE6CB2300E4F89E /* Course+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Course+CoreDataProperties.h"; sourceTree = "<group>"; };
+		63AA86071DE6CB2300E4F89E /* Course+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Course+CoreDataProperties.m"; sourceTree = "<group>"; };
+		63AA86081DE6CB2300E4F89E /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
+		63AA86091DE6CB2300E4F89E /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
+		63AA860A1DE6CB2300E4F89E /* Student+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Student+CoreDataProperties.h"; sourceTree = "<group>"; };
+		63AA860B1DE6CB2300E4F89E /* Student+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Student+CoreDataProperties.m"; sourceTree = "<group>"; };
+		63AA860C1DE6CB2300E4F89E /* Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
+		63AA860D1DE6CB2300E4F89E /* Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +93,7 @@
 		6373A31F1DE1C3D60018A049 /* Assignment3 */ = {
 			isa = PBXGroup;
 			children = (
+				63AA86141DE6CB2F00E4F89E /* CoreData */,
 				6373A3441DE1D24C0018A049 /* Controllers */,
 				6373A33D1DE1CCCA0018A049 /* Utilities */,
 				6373A3231DE1C3D60018A049 /* AppDelegate.h */,
@@ -121,6 +140,25 @@
 				63AA86001DE51F7B00E4F89E /* ScoreViewController.m */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		63AA86141DE6CB2F00E4F89E /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				63AA86021DE6CB2300E4F89E /* Enrollment+CoreDataProperties.h */,
+				63AA86031DE6CB2300E4F89E /* Enrollment+CoreDataProperties.m */,
+				63AA86041DE6CB2300E4F89E /* Enrollment.h */,
+				63AA86051DE6CB2300E4F89E /* Enrollment.m */,
+				63AA86061DE6CB2300E4F89E /* Course+CoreDataProperties.h */,
+				63AA86071DE6CB2300E4F89E /* Course+CoreDataProperties.m */,
+				63AA86081DE6CB2300E4F89E /* Course.h */,
+				63AA86091DE6CB2300E4F89E /* Course.m */,
+				63AA860A1DE6CB2300E4F89E /* Student+CoreDataProperties.h */,
+				63AA860B1DE6CB2300E4F89E /* Student+CoreDataProperties.m */,
+				63AA860C1DE6CB2300E4F89E /* Student.h */,
+				63AA860D1DE6CB2300E4F89E /* Student.m */,
+			);
+			name = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,14 +233,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				6373A3431DE1D23E0018A049 /* CourseTableViewController.m in Sources */,
+				63AA86111DE6CB2300E4F89E /* Course.m in Sources */,
+				63AA86131DE6CB2300E4F89E /* Student.m in Sources */,
 				63AA85FE1DE390DC00E4F89E /* StudentDetailViewController.m in Sources */,
 				6373A3471DE1D2620018A049 /* StudentTableViewController.m in Sources */,
 				63AA86011DE51F7B00E4F89E /* ScoreViewController.m in Sources */,
+				63AA86121DE6CB2300E4F89E /* Student+CoreDataProperties.m in Sources */,
 				6373A32E1DE1C3D60018A049 /* Assignment3.xcdatamodeld in Sources */,
 				63AA85FB1DE1DD3A00E4F89E /* CourseDetailViewController.m in Sources */,
+				63AA86101DE6CB2300E4F89E /* Course+CoreDataProperties.m in Sources */,
+				63AA860F1DE6CB2300E4F89E /* Enrollment.m in Sources */,
 				6373A3251DE1C3D60018A049 /* AppDelegate.m in Sources */,
 				6373A3221DE1C3D60018A049 /* main.m in Sources */,
 				6373A3401DE1CD4F0018A049 /* Utilities.m in Sources */,
+				63AA860E1DE6CB2300E4F89E /* Enrollment+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

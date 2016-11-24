@@ -11,7 +11,7 @@
 
 @interface CourseTableViewController ()
 -(NSManagedObjectContext*) managedObjectContext;
-@property (strong) NSMutableArray* courseList;
+@property (strong, nonatomic) NSMutableArray<Course*>* courseList;
 
 @end
 
@@ -41,26 +41,18 @@
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    /* Get CoreData context */
-    NSManagedObjectContext* context = self.managedObjectContext;
-    NSError* error = nil;
-    
-    /* Create a fetch request against Course table */
-    NSFetchRequest *fetchCourses = [[NSFetchRequest alloc] initWithEntityName:@"Course"];
     
     /* See if we need to filter the fetch */
-    if (self.enrolledCourses.count > 0) {
-        NSPredicate* exclude = [NSPredicate predicateWithFormat:@"NOT (courseName in %@)",self.enrolledCourses];
-        [fetchCourses setPredicate:exclude];
-    }
-    /* Execute the query and save it into courseList */
-    self.courseList = [[context executeFetchRequest:fetchCourses error:&error] mutableCopy];
-    
-    if (error) {
-        NSLog(@"Failed fetching Course data: %@\n", error);
+    NSArray* predicates = nil;
+    if (self.excludeCourses.count > 0) {
+        NSPredicate* exclude = [NSPredicate predicateWithFormat:@"NOT (courseName in %@)",self.excludeCourses];
+        predicates = @[exclude];
     }
     
-    /* Tell Table View to refresh */
+    // Get Courses data
+    self.courseList = [Course fetchRowsWithPredicates:predicates inContext:self.managedObjectContext];
+    
+    // Tell Table View to refresh
     [self.tableView reloadData];
 
 }
@@ -97,17 +89,17 @@
     
     // Configure the cell...
     /* Retrieve NSManagedObject from Array */
-    NSManagedObject* aCourse = [self.courseList objectAtIndex:indexPath.row];
+    Course* aCourse = [self.courseList objectAtIndex:indexPath.row];
     
-    NSString* courseName = [aCourse valueForKey:@"courseName"];
-    NSNumber* hWeight = [aCourse valueForKey:@"hWeight"];
-    NSNumber* mWeight = [aCourse valueForKey:@"mWeight"];
-    NSNumber* fWeight = [aCourse valueForKey:@"fWeight"];
-    NSSet *registeredStudents = [aCourse valueForKey:@"students"];
+    NSString* courseName = aCourse.courseName;
+    float hWeight = [aCourse.hWeight floatValue];
+    float mWeight = [aCourse.mWeight floatValue];
+    float fWeight = [aCourse.fWeight floatValue];
+    NSUInteger numOfStudents = aCourse.students.count;
     
     /* Format string for cell */
-    NSString *title = [NSString stringWithFormat:@"%@ - %lu registered", courseName, registeredStudents.count];
-    NSString *detail = [NSString stringWithFormat:@"hWeight: %@ mWeight: %@ fWeight: %@", hWeight, mWeight, fWeight];
+    NSString *title = [NSString stringWithFormat:@"%@ - %lu registered", courseName, numOfStudents];
+    NSString *detail = [NSString stringWithFormat:@"hWeight: %.2f mWeight: %.2f fWeight: %.2f", hWeight, mWeight, fWeight];
     
     /* Populate data from aCourse */
     cell.textLabel.text = title;
@@ -120,12 +112,7 @@
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    NSManagedObject* selectedCourse = [self.courseList objectAtIndex:indexPath.row];
-    if ([[selectedCourse valueForKey:@"students"] count] > 0) {
-        return NO;
-    } else {
-	    return YES;
-    }
+    return YES;
 }
 
 // Override to support editing the table view.
@@ -136,38 +123,23 @@
         NSManagedObjectContext* context = self.managedObjectContext;
         NSError* error = nil;
         
-        NSManagedObject* selectedCourse = [self.courseList objectAtIndex:indexPath.row];
+        Course* selectedCourse = [self.courseList objectAtIndex:indexPath.row];
         
-        // Tell the context to deleted the selectedCourse
-        [context deleteObject:selectedCourse];
-        
-        if (! [context save:&error]) {
-            NSLog(@"Failed to remove seleted course %@\n", error);
+        if (selectedCourse.students.count == 0) {
+            // We only allow the course deletion when there are no student registered
+            [context deleteObject:selectedCourse];
+            
+            if (! [context save:&error]) {
+                NSLog(@"Failed to remove seleted course %@\n", error);
+            }
+            
+            // Delete the object from array
+            [self.courseList removeObjectAtIndex:indexPath.row];
+            // Delete the row from the data source
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
-        
-        // Delete the object from array
-        [self.courseList removeObjectAtIndex:indexPath.row];
-        // Delete the row from the data source
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark - Navigation
 
@@ -180,7 +152,7 @@
         CourseDetailViewController* detailVC = [segue destinationViewController];
         /* Get selected course from array for the selected row from table view */
         NSIndexPath* selectedPath = [self.tableView indexPathForCell:sender];
-        NSManagedObject* selectedCourse = [self.courseList objectAtIndex:selectedPath.row];
+        Course* selectedCourse = [self.courseList objectAtIndex:selectedPath.row];
         
         /* Pass it to the detail view Controller */
         detailVC.aCourse = selectedCourse;
@@ -188,12 +160,12 @@
     } else if ([segue.identifier isEqualToString:@"enrollSelectedCourses"]) {
         // NSLog(@"We want to enrolled the selected courses");
         NSArray* selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-        self.enrolledCourses = [[NSMutableArray alloc] init];
+        self.selectedCourses = [[NSMutableArray alloc] init];
         
         // NSLog(@"Selected index are: %@", selectedIndexPaths);
         for(NSIndexPath *path in selectedIndexPaths) {
-            NSManagedObject *course = self.courseList[path.row];
-            [self.enrolledCourses addObject: [course valueForKey:@"courseName"]];
+            Course *course = self.courseList[path.row];
+            [self.selectedCourses addObject: course];
         }
     }
 

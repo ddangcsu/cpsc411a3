@@ -7,11 +7,12 @@
 //
 
 #import "StudentTableViewController.h"
-#import "studentDetailViewController.h"
+#import "StudentDetailViewController.h"
+#import "Student.h"
 
 @interface StudentTableViewController ()
 -(NSManagedObjectContext*) managedObjectContext;
-@property (nonatomic, strong) NSMutableArray* studentList;
+@property (nonatomic, strong) NSMutableArray<Student*>* studentList;
 
 @end
 
@@ -35,17 +36,8 @@
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    /* get context */
-    NSError* error = nil;
-    NSManagedObjectContext* context = self.managedObjectContext;
-    NSFetchRequest* fetchAllStudents = [[NSFetchRequest alloc] initWithEntityName:@"Student"];
-    
-    /* Execute the query and convert the result NSArray into NSMutableArray */
-    self.studentList = [[context executeFetchRequest:fetchAllStudents error:&error] mutableCopy];
-    if (!self.studentList) {
-        NSLog(@"Error fetching students %@\n", error);
-        abort();
-    }
+    // Get Student data
+    self.studentList = [Student fetchRowsWithPredicates:nil inContext:self.managedObjectContext];
     
     /* Tell the tableview to refresh itself */
     [self.tableView reloadData];
@@ -78,14 +70,14 @@
     
     // Configure the cell...
     /* Retrieve the object from array */
-    NSManagedObject* aStudent = [self.studentList objectAtIndex:indexPath.row];
-    NSString* firstName = [aStudent valueForKey:@"firstName"];
-    NSString* lastName = [aStudent valueForKey:@"lastName"];
-    NSString* cwid = [aStudent valueForKey:@"cwid"];
-    NSSet* registeredCourses = [aStudent valueForKey: @"courses"];
+    Student* aStudent = [self.studentList objectAtIndex:indexPath.row];
+    NSString* firstName = aStudent.firstName;
+    NSString* lastName = aStudent.lastName;
+    NSString* cwid = aStudent.cwid;
+	NSUInteger numOfCourses = aStudent.courses.count;
     
     /* Format string for cell */
-    NSString * title = [NSString stringWithFormat:@"%@ %@ - %lu courses", firstName, lastName, registeredCourses.count];
+    NSString * title = [NSString stringWithFormat:@"%@ %@ - %lu courses", firstName, lastName, numOfCourses];
     NSString * detail = [NSString stringWithFormat:@"CWID: %@", cwid];
     /* Populate the cell */
     cell.textLabel.text = title;
@@ -97,8 +89,8 @@
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    NSManagedObject* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
-    if ([[selectedStudent valueForKey:@"courses"]count] > 0){
+    Student* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
+    if (selectedStudent.courses.count > 0){
         return NO;
     } else {
 	    return YES;
@@ -112,7 +104,7 @@
         /* Get context */
         NSError* error = nil;
         NSManagedObjectContext* context = self.managedObjectContext;
-        NSManagedObject* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
+        Student* selectedStudent = [self.studentList objectAtIndex:indexPath.row];
         /*Delete it */
         [context deleteObject: selectedStudent];
         if (! [context save:&error]) {

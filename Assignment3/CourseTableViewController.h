@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "Course.h"
 
 @interface CourseTableViewController : UITableViewController
 @property (strong, nonatomic) NSString* segueIdentifier;
-@property (strong, nonatomic) NSMutableArray* enrolledCourses;
+@property (strong, nonatomic) NSArray<NSString*>* excludeCourses;
+@property (strong, nonatomic) NSMutableArray<Course*>* selectedCourses;
 
 @end

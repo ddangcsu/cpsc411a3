@@ -11,14 +11,14 @@
 #import "ScoreViewController.h"
 
 @interface StudentDetailViewController ()
-@property (strong, nonatomic) NSMutableArray* registeredCourses;
+@property (strong, nonatomic) NSMutableArray<Enrollment*>* enrollmentList;
 
 #pragma mark - UI Properties
 @property (weak, nonatomic) IBOutlet UILabel *labelError;
 @property (weak, nonatomic) IBOutlet UITextField *firstName;
 @property (weak, nonatomic) IBOutlet UITextField *lastName;
 @property (weak, nonatomic) IBOutlet UITextField *cwid;
-@property (weak, nonatomic) IBOutlet UITableView *registeredCoursesView;
+@property (weak, nonatomic) IBOutlet UITableView *enrollmentsView;
 
 #pragma mark - Core Data managedObjectContext
 - (NSManagedObjectContext*) managedObjectContext;
@@ -41,12 +41,11 @@
         // We are editing existing student
     	self.navigationItem.title = @"Update Student";
         
-        self.firstName.text = [self.aStudent valueForKey:@"firstName"];
-        self.lastName.text = [self.aStudent valueForKey:@"lastName"];
-        self.cwid.text = [self.aStudent valueForKey:@"cwid"];
-        /* Get all the registered courses if any */
-        self.registeredCourses = [[[self.aStudent valueForKeyPath:@"courses"] allObjects]mutableCopy];
-        
+        self.firstName.text = self.aStudent.firstName;
+        self.lastName.text = self.aStudent.lastName;
+        self.cwid.text = self.aStudent.cwid;
+        /* Get all the enrollment courses if any */
+        self.enrollmentList = [[self.aStudent.courses allObjects] mutableCopy];
         
     } else {
         self.navigationItem.title = @"New Student";
@@ -56,7 +55,7 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.registeredCoursesView reloadData];
+    [self.enrollmentsView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -94,7 +93,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.registeredCourses.count;
+    return self.enrollmentList.count;
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -139,14 +138,16 @@
     NSString* cellId = @"registeredCourse";
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     
-    NSManagedObject* enrolledCourse = [self.registeredCourses objectAtIndex:indexPath.row];
-    NSNumber* hScore = [enrolledCourse valueForKey:@"hScore"];
-    NSNumber* mScore = [enrolledCourse valueForKey:@"mScore"];
-    NSNumber* fScore = [enrolledCourse valueForKey:@"fScore"];
+    Enrollment* enrolledCourse = [self.enrollmentList objectAtIndex:indexPath.row];
+    float hScore = [enrolledCourse.hScore floatValue];
+    float mScore = [enrolledCourse.mScore floatValue];
+    float fScore = [enrolledCourse.fScore floatValue];
+    
+    float courseAverage = [enrolledCourse averageScore];
     
     /* Format string for cell */
-    NSString* title = [enrolledCourse valueForKeyPath:@"course.courseName"];
-    NSString* detail = [NSString stringWithFormat:@"hScore: %@ mScore: %@ fScore: %@", hScore, mScore, fScore];
+    NSString* title = [NSString stringWithFormat:@"%@ - Average: %.2f%%",[enrolledCourse valueForKeyPath:@"course.courseName"], courseAverage];
+    NSString* detail = [NSString stringWithFormat:@"hScore: %.2f mScore: %.2f fScore: %.2f", hScore, mScore, fScore];
     
     /* Populate the cell */
     cell.textLabel.text = title;
@@ -163,18 +164,19 @@
         NSError* error = nil;
         NSManagedObjectContext* context = self.managedObjectContext;
         
+        Enrollment* selectedCourse = [self.enrollmentList objectAtIndex:indexPath.row];
         /* Delete it */
-        [context deleteObject:[self.registeredCourses objectAtIndex:indexPath.row]];
+        [context deleteObject:selectedCourse];
         if (! [context save:&error]) {
             NSLog(@"Failed to delete student %@\n", error);
             abort();
         }
         
         /* Remove the data from student List */
-        [self.registeredCourses removeObjectAtIndex:indexPath.row];
+        [self.enrollmentList removeObjectAtIndex:indexPath.row];
         
         // Delete the row from the data source
-        [self.registeredCoursesView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self.enrollmentsView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -256,18 +258,19 @@
         courseListVC.segueIdentifier = segue.identifier;
         
         NSMutableArray* excludeList = [[NSMutableArray alloc] init];
-        for (NSManagedObject* course in self.registeredCourses) {
+        for (Enrollment* course in self.enrollmentList) {
             [excludeList addObject:[course valueForKeyPath:@"course.courseName"]];
         }
         
         // We also pass the current enrolled Courses so that the list will be filtered
         // and only display courses that we have not register yet.
-        courseListVC.enrolledCourses = excludeList;
+        courseListVC.excludeCourses = excludeList;
         
     } else if ([segue.identifier isEqualToString:@"editScore"]) {
         // Get the Destination View Controller
         ScoreViewController* scoreVC = segue.destinationViewController;
-        scoreVC.courseScore = [self.registeredCourses objectAtIndex:[self.registeredCoursesView indexPathForSelectedRow].row];
+        NSIndexPath *selectedPath = [self.enrollmentsView indexPathForSelectedRow];
+        scoreVC.courseScore = [self.enrollmentList objectAtIndex:selectedPath.row];
     }
 
 }
@@ -277,33 +280,28 @@
     // NSLog(@"Unwinded from Course List");
     
     // Get enrolled Courses from sourceVC
-    CourseTableViewController* enrolledVC = segue.sourceViewController;
-    NSMutableArray* enrolledCourses = enrolledVC.enrolledCourses;
+    CourseTableViewController* courseListVC = segue.sourceViewController;
+    NSMutableArray<Course*>* selectedCourses = courseListVC.selectedCourses;
     
-    if (enrolledCourses.count > 0) {
+    if (selectedCourses.count > 0) {
         // Add the selected courses to the temporary enrolled Courses array
         NSManagedObjectContext *context = self.managedObjectContext;
         NSError* error = nil;
-        NSFetchRequest* fetchSelectedCourses = [[NSFetchRequest alloc] initWithEntityName:@"Course"];
-        [fetchSelectedCourses setPredicate:[NSPredicate predicateWithFormat:@"courseName IN %@", enrolledCourses]];
-        NSArray* results = [context executeFetchRequest:fetchSelectedCourses error:&error];
-        if (! results) {
-            NSLog(@"Failed to fetch selected courses %@\n", error);
-            abort();
-        }
-        for (NSManagedObject* course in results) {
-            NSManagedObject* enrollment = [NSEntityDescription insertNewObjectForEntityForName:@"Enrollment" inManagedObjectContext:context];
-            [enrollment setValue:@0 forKey:@"hScore"];
-            [enrollment setValue:@0 forKey:@"mScore"];
-            [enrollment setValue:@0 forKey:@"fScore"];
-            [enrollment setValue:course forKey:@"course"];
-            [enrollment setValue:self.aStudent forKey:@"student"];
+
+        for (Course* course in selectedCourses) {
+            // We enroll the student to each of the courses
+            // the Score for each score will be auto default to 0 so we do not need to set
+            Enrollment* enrollment = [NSEntityDescription insertNewObjectForEntityForName:@"Enrollment" inManagedObjectContext:context];
+            enrollment.student = self.aStudent;
+            enrollment.course = course;
             
-            if (![context save: &error]) {
-                NSLog(@"Error unable to save course %@\n", error);
-            }
+            [self.enrollmentList addObject:enrollment];
         }
-        
+
+        if (![context save: &error]) {
+            NSLog(@"Error unable to save course %@\n", error);
+        }
+        /*
         NSFetchRequest* fetchEnrolled = [[NSFetchRequest alloc] initWithEntityName:@"Enrollment"];
         [fetchEnrolled setPredicate:[NSPredicate predicateWithFormat:@"student = %@", self.aStudent]];
         self.registeredCourses = [[context executeFetchRequest:fetchEnrolled error:&error] mutableCopy];
@@ -311,8 +309,8 @@
             NSLog(@"Failed to fetch selected courses %@\n", error);
             abort();
         }
-
-        [self.registeredCoursesView reloadData];
+        */
+        [self.enrollmentsView reloadData];
     }
 
 }

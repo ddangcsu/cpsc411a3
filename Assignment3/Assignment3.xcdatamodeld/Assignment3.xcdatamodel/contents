@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G1004" minimumToolsVersion="Automatic">
-    <entity name="Course" syncable="YES">
+    <entity name="Course" representedClassName="Course" syncable="YES">
         <attribute name="courseName" attributeType="String" maxValueString="30" syncable="YES"/>
         <attribute name="fWeight" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0" syncable="YES"/>
         <attribute name="hWeight" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0" syncable="YES"/>
         <attribute name="mWeight" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0" syncable="YES"/>
-        <relationship name="students" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Enrollment" inverseName="course" inverseEntity="Enrollment" syncable="YES"/>
+        <relationship name="students" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enrollment" inverseName="course" inverseEntity="Enrollment" syncable="YES"/>
     </entity>
-    <entity name="Enrollment" syncable="YES">
+    <entity name="Enrollment" representedClassName="Enrollment" syncable="YES">
         <attribute name="fScore" optional="YES" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0.0" syncable="YES"/>
         <attribute name="hScore" optional="YES" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0.0" syncable="YES"/>
         <attribute name="mScore" optional="YES" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0.0" syncable="YES"/>
         <relationship name="course" maxCount="1" deletionRule="Nullify" destinationEntity="Course" inverseName="students" inverseEntity="Course" syncable="YES"/>
         <relationship name="student" maxCount="1" deletionRule="Nullify" destinationEntity="Student" inverseName="courses" inverseEntity="Student" syncable="YES"/>
     </entity>
-    <entity name="Student" syncable="YES">
+    <entity name="Student" representedClassName="Student" syncable="YES">
         <attribute name="cwid" attributeType="String" minValueString="9" maxValueString="9" syncable="YES"/>
         <attribute name="firstName" attributeType="String" maxValueString="30" syncable="YES"/>
         <attribute name="lastName" attributeType="String" maxValueString="30" syncable="YES"/>
-        <relationship name="courses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Enrollment" inverseName="student" inverseEntity="Enrollment" syncable="YES"/>
+        <relationship name="courses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enrollment" inverseName="student" inverseEntity="Enrollment" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Course" positionX="358" positionY="-1" width="128" height="120"/>
-        <element name="Enrollment" positionX="153" positionY="278" width="128" height="120"/>
-        <element name="Student" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="Course" positionX="358" positionY="-1" width="128" height="118"/>
+        <element name="Enrollment" positionX="153" positionY="278" width="128" height="118"/>
+        <element name="Student" positionX="-63" positionY="-18" width="128" height="103"/>
     </elements>
 </model>
