@@ -117,7 +117,7 @@
                                 </connections>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-cX-yj8" userLabel="Enrollment View">
-                                <rect key="frame" x="20" y="227" width="374" height="489"/>
+                                <rect key="frame" x="20" y="239" width="374" height="477"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="registeredCourse" textLabel="jzW-ug-cqj" detailTextLabel="VjB-Lh-YPm" style="IBUITableViewCellStyleSubtitle" id="01V-sc-DUI">
@@ -578,8 +578,8 @@
         <image name="students" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="KgL-hz-ing"/>
-        <segue reference="Z92-0u-Vf1"/>
         <segue reference="8Rv-rq-QYT"/>
+        <segue reference="0xW-Kf-T0y"/>
+        <segue reference="KgL-hz-ing"/>
     </inferredMetricsTieBreakers>
 </document>
