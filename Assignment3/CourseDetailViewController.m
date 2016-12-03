@@ -51,6 +51,7 @@
     } else {
         // We are doing a new add
         self.navigationItem.title = @"New Course";
+        self.showEnrolledStudentsButton.hidden = YES;
     }
 }
 
